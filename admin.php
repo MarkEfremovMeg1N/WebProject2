@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_action'])) {
     $stmt = $pdo->prepare("SELECT id, password_hash FROM my_admin_users WHERE login = ?");
     $stmt->execute([$login]);
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($admin && md5($password) === $admin['password_hash']) {
+    if ($password === $admin['password_hash']) {
         $_SESSION['admin_logged_in'] = true;
         header('Location: admin.php');
         exit;
