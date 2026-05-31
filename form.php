@@ -7,16 +7,19 @@ require_once 'db.php';
 require_once 'validation.php';
 
 // ---------- Вспомогательные функции ----------
-function redirect($url) {
+function redirect($url)
+{
     header('Location: ' . $url);
     exit;
 }
 
-function generateLogin() {
+function generateLogin()
+{
     return 'user_' . time() . '_' . bin2hex(random_bytes(4));
 }
 
-function generatePassword($length = 10) {
+function generatePassword($length = 10)
+{
     return bin2hex(random_bytes($length));
 }
 
@@ -31,13 +34,13 @@ $auth_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_action'])) {
     $login = $_POST['login'] ?? '';
     $password = $_POST['password'] ?? '';
-    
+
     try {
         $pdo = getDB();
-        $stmt = $pdo->prepare("SELECT id, password_hash FROM vinokurov_applications WHERE login = ?");
+        $stmt = $pdo->prepare("SELECT id, password_hash FROM my_applications WHERE login = ?");
         $stmt->execute([$login]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
             redirect('form.php?auth_success=1');
@@ -59,10 +62,11 @@ $user_data = null;
 if ($is_authenticated) {
     try {
         $pdo = getDB();
-        $stmt = $pdo->prepare("SELECT * FROM vinokurov_applications WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM my_applications WHERE id = ?");
         $stmt->execute([$current_user_id]);
         $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {}
+    } catch (PDOException $e) {
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_application'])) {
@@ -76,39 +80,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_application'])) 
         'bio'         => trim($_POST['bio'] ?? ''),
         'agreement'   => isset($_POST['agreement']) ? 1 : 0,
     ];
-    
+
     $errors = [];
     $valid = validateApplicationData($input, $errors);
-    
+
     if (!$valid) {
         setcookie('form_errors', json_encode($errors), 0, '/');
         setcookie('form_input', json_encode($input), 0, '/');
         redirect('form.php');
     }
-    
+
     try {
         $pdo = getDB();
         $pdo->beginTransaction();
-        
+
         if ($is_authenticated) {
             // Обновление
-            $sql = "UPDATE vinokurov_applications 
+            $sql = "UPDATE my_applications 
                     SET full_name = ?, phone = ?, email = ?, birth_date = ?, gender = ?, bio = ?, agreement = ?
                     WHERE id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $input['full_name'], $input['phone'], $input['email'],
-                $input['birth_date'], $input['gender'], $input['bio'],
-                $input['agreement'], $current_user_id
+                $input['full_name'],
+                $input['phone'],
+                $input['email'],
+                $input['birth_date'],
+                $input['gender'],
+                $input['bio'],
+                $input['agreement'],
+                $current_user_id
             ]);
             $application_id = $current_user_id;
-            
-            $pdo->prepare("DELETE FROM vinokurov_application_languages WHERE application_id = ?")->execute([$application_id]);
-            $stmt_lang = $pdo->prepare("INSERT INTO vinokurov_application_languages (application_id, language_id) VALUES (?, ?)");
+
+            $pdo->prepare("DELETE FROM my_application_languages WHERE application_id = ?")->execute([$application_id]);
+            $stmt_lang = $pdo->prepare("INSERT INTO my_application_languages (application_id, language_id) VALUES (?, ?)");
             foreach ($input['languages'] as $lang_id) {
                 $stmt_lang->execute([$application_id, $lang_id]);
             }
-            
+
             $pdo->commit();
             setcookie('form_defaults', json_encode($input), time() + 365 * 86400, '/');
             setcookie('form_errors', '', 1, '/');
@@ -119,28 +128,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_application'])) 
             $login = generateLogin();
             $plain_password = generatePassword();
             $password_hash = password_hash($plain_password, PASSWORD_DEFAULT);
-            
-            $sql = "INSERT INTO vinokurov_applications 
+
+            $sql = "INSERT INTO my_applications 
                     (full_name, phone, email, birth_date, gender, bio, agreement, login, password_hash)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                $input['full_name'], $input['phone'], $input['email'],
-                $input['birth_date'], $input['gender'], $input['bio'],
-                $input['agreement'], $login, $password_hash
+                $input['full_name'],
+                $input['phone'],
+                $input['email'],
+                $input['birth_date'],
+                $input['gender'],
+                $input['bio'],
+                $input['agreement'],
+                $login,
+                $password_hash
             ]);
             $application_id = $pdo->lastInsertId();
-            
-            $stmt_lang = $pdo->prepare("INSERT INTO vinokurov_application_languages (application_id, language_id) VALUES (?, ?)");
+
+            $stmt_lang = $pdo->prepare("INSERT INTO my_application_languages (application_id, language_id) VALUES (?, ?)");
             foreach ($input['languages'] as $lang_id) {
                 $stmt_lang->execute([$application_id, $lang_id]);
             }
-            
+
             $pdo->commit();
             setcookie('form_defaults', json_encode($input), time() + 365 * 86400, '/');
             setcookie('form_errors', '', 1, '/');
             setcookie('form_input', '', 1, '/');
-            
+
             $_SESSION['generated_credentials'] = ['login' => $login, 'password' => $plain_password];
             redirect('form.php?registered=1');
         }
@@ -181,13 +196,15 @@ if ($is_authenticated && $user_data) {
     ];
     try {
         $pdo = getDB();
-        $stmt = $pdo->prepare("SELECT language_id FROM vinokurov_application_languages WHERE application_id = ?");
+        $stmt = $pdo->prepare("SELECT language_id FROM my_application_languages WHERE application_id = ?");
         $stmt->execute([$current_user_id]);
         $defaults['languages'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
-    } catch (PDOException $e) {}
+    } catch (PDOException $e) {
+    }
 }
 
-function get_field_value($field, $input, $defaults) {
+function get_field_value($field, $input, $defaults)
+{
     if (isset($input[$field]) && $input[$field] !== '') {
         return htmlspecialchars($input[$field]);
     }
@@ -197,7 +214,8 @@ function get_field_value($field, $input, $defaults) {
     return '';
 }
 
-function is_language_selected($lang_id, $input, $defaults) {
+function is_language_selected($lang_id, $input, $defaults)
+{
     $selected = [];
     if (isset($input['languages']) && is_array($input['languages'])) {
         $selected = $input['languages'];
@@ -229,6 +247,7 @@ unset($_SESSION['auth_error']);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -244,34 +263,40 @@ unset($_SESSION['auth_error']);
             margin: 0;
             padding: 20px;
         }
+
         .anketa-container {
             max-width: 900px;
             margin: 40px auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 40px;
         }
+
         .anketa-title {
             font-size: 36px;
             font-weight: 700;
             color: #050c33;
             margin-bottom: 10px;
         }
+
         .anketa-subtitle {
             color: #666;
             margin-bottom: 30px;
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
         }
+
         .form-group {
             margin-bottom: 22px;
         }
+
         .form-group label {
             font-weight: 600;
             margin-bottom: 8px;
             display: block;
         }
+
         .form-group input:not([type="radio"]),
         .form-group select,
         .form-group textarea {
@@ -282,34 +307,40 @@ unset($_SESSION['auth_error']);
             font-size: 15px;
             transition: 0.3s;
         }
+
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             border-color: #f14d34;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(241,77,52,0.1);
+            box-shadow: 0 0 0 3px rgba(241, 77, 52, 0.1);
         }
+
         .radio-group {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             margin-top: 5px;
         }
+
         .radio-group label {
             font-weight: normal;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
+
         select[multiple] {
             min-height: 130px;
         }
+
         .checkbox-group {
             margin: 20px 0;
             background: #f8f9ff;
             padding: 12px 15px;
             border-radius: 10px;
         }
+
         .btn-submit {
             background: #f14d34;
             color: white;
@@ -322,33 +353,40 @@ unset($_SESSION['auth_error']);
             font-weight: 600;
             transition: background 0.3s;
         }
+
         .btn-submit:hover {
             background: #d9432d;
         }
+
         .input-error {
             border: 2px solid #e74c3c !important;
             background-color: #ffe6e6;
         }
+
         .error-message {
             color: #e74c3c;
             font-size: 13px;
             margin-top: 5px;
         }
+
         .alert {
             padding: 12px 20px;
             border-radius: 8px;
             margin-bottom: 25px;
         }
+
         .alert-success {
             background: #d4edda;
             color: #155724;
             border-left: 5px solid #28a745;
         }
+
         .alert-error {
             background: #f8d7da;
             color: #721c24;
             border-left: 5px solid #dc3545;
         }
+
         .login-form {
             background: #f8f9fa;
             padding: 20px;
@@ -356,181 +394,186 @@ unset($_SESSION['auth_error']);
             margin-bottom: 30px;
             border: 1px solid #ddd;
         }
+
         .logout-link {
             text-align: right;
             margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
-<div class="anketa-container">
-    <div class="logout-link">
-        <?php if ($is_authenticated): ?><a href="?logout=1">Выйти</a><?php endif; ?>
+    <div class="anketa-container">
+        <div class="logout-link">
+            <?php if ($is_authenticated): ?><a href="?logout=1">Выйти</a><?php endif; ?>
+        </div>
+
+        <?php if (!$is_authenticated): ?>
+            <div class="login-form">
+                <h3>Вход для редактирования</h3>
+                <form method="POST">
+                    <input type="hidden" name="login_action" value="1">
+                    <div class="form-group"><label>Логин: <input type="text" name="login" required></label></div>
+                    <div class="form-group"><label>Пароль: <input type="password" name="password" required></label></div>
+                    <button type="submit" class="btn-submit" style="width:auto;">Войти</button>
+                    <?php if ($auth_error): ?><div class="error-message"><?= htmlspecialchars($auth_error) ?></div><?php endif; ?>
+                </form>
+            </div>
+        <?php endif; ?>
+
+        <?= $success_msg ?>
+
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-error">❌ При заполнении формы допущены ошибки. Исправьте их и отправьте снова.</div>
+        <?php endif; ?>
+
+        <form method="POST" id="anketa-form">
+            <input type="hidden" name="save_application" value="1">
+
+            <!-- ФИО -->
+            <div class="form-group">
+                <label for="full_name" class="required">ФИО</label>
+                <input type="text" name="full_name" id="full_name" value="<?= get_field_value('full_name', $input, $defaults) ?>" class="<?= isset($errors['full_name']) ? 'input-error' : '' ?>">
+                <?php if (isset($errors['full_name'])): ?><div class="error-message"><?= htmlspecialchars($errors['full_name']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Телефон -->
+            <div class="form-group">
+                <label for="phone" class="required">Телефон</label>
+                <input type="tel" name="phone" id="phone" value="<?= get_field_value('phone', $input, $defaults) ?>" class="<?= isset($errors['phone']) ? 'input-error' : '' ?>">
+                <?php if (isset($errors['phone'])): ?><div class="error-message"><?= htmlspecialchars($errors['phone']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email" class="required">E-mail</label>
+                <input type="email" name="email" id="email" value="<?= get_field_value('email', $input, $defaults) ?>" class="<?= isset($errors['email']) ? 'input-error' : '' ?>">
+                <?php if (isset($errors['email'])): ?><div class="error-message"><?= htmlspecialchars($errors['email']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Дата рождения -->
+            <div class="form-group">
+                <label for="birth_date" class="required">Дата рождения</label>
+                <input type="date" name="birth_date" id="birth_date" value="<?= get_field_value('birth_date', $input, $defaults) ?>" class="<?= isset($errors['birth_date']) ? 'input-error' : '' ?>">
+                <?php if (isset($errors['birth_date'])): ?><div class="error-message"><?= htmlspecialchars($errors['birth_date']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Пол -->
+            <div class="form-group">
+                <label class="required">Пол</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male" <?= get_field_value('gender', $input, $defaults) == 'male' ? 'checked' : '' ?>> Мужской</label>
+                    <label><input type="radio" name="gender" value="female" <?= get_field_value('gender', $input, $defaults) == 'female' ? 'checked' : '' ?>> Женский</label>
+                    <label><input type="radio" name="gender" value="other" <?= get_field_value('gender', $input, $defaults) == 'other' ? 'checked' : '' ?>> Другой</label>
+                </div>
+                <?php if (isset($errors['gender'])): ?><div class="error-message"><?= htmlspecialchars($errors['gender']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Любимые языки программирования -->
+            <div class="form-group">
+                <label for="languages" class="required">Любимые языки программирования</label>
+                <select name="languages[]" id="languages" multiple size="6" class="<?= isset($errors['languages']) ? 'input-error' : '' ?>">
+                    <?php
+                    $lang_list = [1 => 'Pascal', 2 => 'C', 3 => 'C++', 4 => 'JavaScript', 5 => 'PHP', 6 => 'Python', 7 => 'Java', 8 => 'Haskell', 9 => 'Clojure', 10 => 'Prolog', 11 => 'Scala', 12 => 'Go'];
+                    foreach ($lang_list as $id => $name):
+                        $selected = is_language_selected($id, $input, $defaults);
+                    ?>
+                        <option value="<?= $id ?>" <?= $selected ? 'selected' : '' ?>><?= $name ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <small>Удерживайте Ctrl (Cmd на Mac) для выбора нескольких</small>
+                <?php if (isset($errors['languages'])): ?><div class="error-message"><?= htmlspecialchars($errors['languages']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Биография -->
+            <div class="form-group">
+                <label for="bio" class="required">Биография</label>
+                <textarea name="bio" id="bio" rows="5" class="<?= isset($errors['bio']) ? 'input-error' : '' ?>"><?= get_field_value('bio', $input, $defaults) ?></textarea>
+                <?php if (isset($errors['bio'])): ?><div class="error-message"><?= htmlspecialchars($errors['bio']) ?></div><?php endif; ?>
+            </div>
+
+            <!-- Согласие -->
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" name="agreement" value="1" <?= get_field_value('agreement', $input, $defaults) == 1 ? 'checked' : '' ?>>
+                    Я ознакомлен(а) с контрактом и согласен(на)
+                </label>
+                <?php if (isset($errors['agreement'])): ?><div class="error-message"><?= htmlspecialchars($errors['agreement']) ?></div><?php endif; ?>
+            </div>
+
+            <button type="submit" class="btn-submit"><?= $is_authenticated ? 'Обновить данные' : 'Сохранить' ?></button>
+        </form>
     </div>
 
-    <?php if (!$is_authenticated): ?>
-        <div class="login-form">
-            <h3>Вход для редактирования</h3>
-            <form method="POST">
-                <input type="hidden" name="login_action" value="1">
-                <div class="form-group"><label>Логин: <input type="text" name="login" required></label></div>
-                <div class="form-group"><label>Пароль: <input type="password" name="password" required></label></div>
-                <button type="submit" class="btn-submit" style="width:auto;">Войти</button>
-                <?php if ($auth_error): ?><div class="error-message"><?= htmlspecialchars($auth_error) ?></div><?php endif; ?>
-            </form>
-        </div>
-    <?php endif; ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('anketa-form');
+            if (!form) return;
+            const isAuthenticated = <?= json_encode($is_authenticated) ?>;
+            const userId = <?= json_encode($current_user_id) ?>;
+            form.addEventListener('submit', async function(e) {
+                if (window.fetch) e.preventDefault();
+                else return;
 
-    <?= $success_msg ?>
-
-    <?php if (!empty($errors)): ?>
-        <div class="alert alert-error">❌ При заполнении формы допущены ошибки. Исправьте их и отправьте снова.</div>
-    <?php endif; ?>
-
-    <form method="POST" id="anketa-form">
-        <input type="hidden" name="save_application" value="1">
-
-        <!-- ФИО -->
-        <div class="form-group">
-            <label for="full_name" class="required">ФИО</label>
-            <input type="text" name="full_name" id="full_name" value="<?= get_field_value('full_name', $input, $defaults) ?>" class="<?= isset($errors['full_name']) ? 'input-error' : '' ?>">
-            <?php if (isset($errors['full_name'])): ?><div class="error-message"><?= htmlspecialchars($errors['full_name']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Телефон -->
-        <div class="form-group">
-            <label for="phone" class="required">Телефон</label>
-            <input type="tel" name="phone" id="phone" value="<?= get_field_value('phone', $input, $defaults) ?>" class="<?= isset($errors['phone']) ? 'input-error' : '' ?>">
-            <?php if (isset($errors['phone'])): ?><div class="error-message"><?= htmlspecialchars($errors['phone']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-            <label for="email" class="required">E-mail</label>
-            <input type="email" name="email" id="email" value="<?= get_field_value('email', $input, $defaults) ?>" class="<?= isset($errors['email']) ? 'input-error' : '' ?>">
-            <?php if (isset($errors['email'])): ?><div class="error-message"><?= htmlspecialchars($errors['email']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Дата рождения -->
-        <div class="form-group">
-            <label for="birth_date" class="required">Дата рождения</label>
-            <input type="date" name="birth_date" id="birth_date" value="<?= get_field_value('birth_date', $input, $defaults) ?>" class="<?= isset($errors['birth_date']) ? 'input-error' : '' ?>">
-            <?php if (isset($errors['birth_date'])): ?><div class="error-message"><?= htmlspecialchars($errors['birth_date']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Пол -->
-        <div class="form-group">
-            <label class="required">Пол</label>
-            <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?= get_field_value('gender', $input, $defaults) == 'male' ? 'checked' : '' ?>> Мужской</label>
-                <label><input type="radio" name="gender" value="female" <?= get_field_value('gender', $input, $defaults) == 'female' ? 'checked' : '' ?>> Женский</label>
-                <label><input type="radio" name="gender" value="other" <?= get_field_value('gender', $input, $defaults) == 'other' ? 'checked' : '' ?>> Другой</label>
-            </div>
-            <?php if (isset($errors['gender'])): ?><div class="error-message"><?= htmlspecialchars($errors['gender']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Любимые языки программирования -->
-        <div class="form-group">
-            <label for="languages" class="required">Любимые языки программирования</label>
-            <select name="languages[]" id="languages" multiple size="6" class="<?= isset($errors['languages']) ? 'input-error' : '' ?>">
-                <?php
-                $lang_list = [1=>'Pascal',2=>'C',3=>'C++',4=>'JavaScript',5=>'PHP',6=>'Python',7=>'Java',8=>'Haskell',9=>'Clojure',10=>'Prolog',11=>'Scala',12=>'Go'];
-                foreach ($lang_list as $id => $name):
-                    $selected = is_language_selected($id, $input, $defaults);
-                ?>
-                    <option value="<?= $id ?>" <?= $selected ? 'selected' : '' ?>><?= $name ?></option>
-                <?php endforeach; ?>
-            </select>
-            <small>Удерживайте Ctrl (Cmd на Mac) для выбора нескольких</small>
-            <?php if (isset($errors['languages'])): ?><div class="error-message"><?= htmlspecialchars($errors['languages']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Биография -->
-        <div class="form-group">
-            <label for="bio" class="required">Биография</label>
-            <textarea name="bio" id="bio" rows="5" class="<?= isset($errors['bio']) ? 'input-error' : '' ?>"><?= get_field_value('bio', $input, $defaults) ?></textarea>
-            <?php if (isset($errors['bio'])): ?><div class="error-message"><?= htmlspecialchars($errors['bio']) ?></div><?php endif; ?>
-        </div>
-
-        <!-- Согласие -->
-        <div class="checkbox-group">
-            <label>
-                <input type="checkbox" name="agreement" value="1" <?= get_field_value('agreement', $input, $defaults) == 1 ? 'checked' : '' ?>>
-                Я ознакомлен(а) с контрактом и согласен(на)
-            </label>
-            <?php if (isset($errors['agreement'])): ?><div class="error-message"><?= htmlspecialchars($errors['agreement']) ?></div><?php endif; ?>
-        </div>
-
-        <button type="submit" class="btn-submit"><?= $is_authenticated ? 'Обновить данные' : 'Сохранить' ?></button>
-    </form>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('anketa-form');
-    if (!form) return;
-    const isAuthenticated = <?= json_encode($is_authenticated) ?>;
-    const userId = <?= json_encode($current_user_id) ?>;
-    form.addEventListener('submit', async function(e) {
-        if (window.fetch) e.preventDefault();
-        else return;
-        
-        const formData = new FormData(form);
-        let data = {};
-        for (let [key, value] of formData.entries()) {
-            if (key.endsWith('[]')) {
-                key = key.slice(0, -2);
-                if (!data[key]) data[key] = [];
-                data[key].push(value);
-            } else {
-                data[key] = value;
-            }
-        }
-        
-        let method = 'POST';
-        let url = 'api.php/application';
-        if (isAuthenticated && userId) {
-            method = 'PUT';
-            url = `api.php/application/${userId}`;
-        }
-        
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                throw new Error('Сервер вернул не JSON: ' + text.substring(0, 100));
-            }
-            
-            const result = await response.json();
-            if (response.ok) {
-                if (method === 'POST' && result.login) {
-                    alert(`Анкета сохранена!\nЛогин: ${result.login}\nПароль: ${result.password}\nСсылка: ${result.profile_url}`);
-                } else {
-                    alert('Данные обновлены!');
-                }
-                window.location.reload();
-            } else {
-                let errorMsg = 'Ошибка:\n';
-                if (result.errors) {
-                    for (let field in result.errors) {
-                        errorMsg += `${field}: ${result.errors[field]}\n`;
+                const formData = new FormData(form);
+                let data = {};
+                for (let [key, value] of formData.entries()) {
+                    if (key.endsWith('[]')) {
+                        key = key.slice(0, -2);
+                        if (!data[key]) data[key] = [];
+                        data[key].push(value);
+                    } else {
+                        data[key] = value;
                     }
-                } else {
-                    errorMsg += result.error || 'Неизвестная ошибка';
                 }
-                alert(errorMsg);
-            }
-        } catch (err) {
-            alert('Ошибка сети: ' + err.message);
-        }
-    });
-});
-</script>
+
+                let method = 'POST';
+                let url = 'api.php/application';
+                if (isAuthenticated && userId) {
+                    method = 'PUT';
+                    url = `api.php/application/${userId}`;
+                }
+
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        const text = await response.text();
+                        throw new Error('Сервер вернул не JSON: ' + text.substring(0, 100));
+                    }
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        if (method === 'POST' && result.login) {
+                            alert(`Анкета сохранена!\nЛогин: ${result.login}\nПароль: ${result.password}\nСсылка: ${result.profile_url}`);
+                        } else {
+                            alert('Данные обновлены!');
+                        }
+                        window.location.reload();
+                    } else {
+                        let errorMsg = 'Ошибка:\n';
+                        if (result.errors) {
+                            for (let field in result.errors) {
+                                errorMsg += `${field}: ${result.errors[field]}\n`;
+                            }
+                        } else {
+                            errorMsg += result.error || 'Неизвестная ошибка';
+                        }
+                        alert(errorMsg);
+                    }
+                } catch (err) {
+                    alert('Ошибка сети: ' + err.message);
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
