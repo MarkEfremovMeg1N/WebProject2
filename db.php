@@ -1,10 +1,11 @@
 <?php
 $db_host = 'localhost';
-$db_name = 'u82089';
-$db_user = 'u82089';
-$db_pass = '4044723';
+$db_name = 'u82184';
+$db_user = 'u82184';
+$db_pass = '6010664';
 
-function getDB() {
+function getDB()
+{
     static $pdo = null;
     if ($pdo === null) {
         global $db_host, $db_name, $db_user, $db_pass;
@@ -17,4 +18,3 @@ function getDB() {
     }
     return $pdo;
 }
-?>
