@@ -2779,3 +2779,13 @@ img {
     font-size: 32px;
   }
 }
+
+.radio-group,
+.radio-group label,
+.radio-group input[type="radio"] {
+  pointer-events: auto !important;
+}
+
+.radio-group label {
+  cursor: pointer;
+}
