@@ -247,163 +247,607 @@ unset($_SESSION['auth_error']);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Анкета разработчика</title>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <title>Drupal Coder - Поддержка сайтов на Drupal</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    <link href="style.css" rel="stylesheet"> -->
-    <style>
-        /* Минимальные стили для формы (можно оставить или положиться на style.css) */
-        body {
-            background: #eef2f7;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .anketa-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-        }
-
-        .anketa-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: #050c33;
-            margin-bottom: 10px;
-        }
-
-        .anketa-subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-group input:not([type="radio"]),
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #f14d34;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(241, 77, 52, 0.1);
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 5px;
-        }
-
-        .radio-group label {
-            font-weight: normal;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        select[multiple] {
-            min-height: 130px;
-        }
-
-        .checkbox-group {
-            margin: 20px 0;
-            background: #f8f9ff;
-            padding: 12px 15px;
-            border-radius: 10px;
-        }
-
-        .btn-submit {
-            background: #f14d34;
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .btn-submit:hover {
-            background: #d9432d;
-        }
-
-        .input-error {
-            border: 2px solid #e74c3c !important;
-            background-color: #ffe6e6;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .alert {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 5px solid #28a745;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 5px solid #dc3545;
-        }
-
-        .login-form {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-        }
-
-        .logout-link {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
-
 <body>
-    <div class="anketa-container">
+    <section id="header" class="header-section">
+  <div class="header-bg">
+    <video autoplay loop muted playsinline class="header-bg-image" alt="Background">
+      <source src="video.mp4" type="video/mp4">
+      <source src="video.webm" type="video/webm">
+      Ваш браузер не поддерживает видео
+    </video>
+    
+    <div class="header-bg-overlay">
+      <div class="header-bg-druplicon">
+        <img src="druplicon.svg" alt="Druplicon background shape cutout" />
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <header class="site-header">
+      <a href="#" class="logo">
+        <img src="drupal-coder.svg" alt="Drupal Coder Logo" />
+      </a>
+      
+      <!-- Гамбургер меню для мобильных -->
+      <button class="hamburger" aria-label="Открыть меню">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#support">Поддержка сайтов</a></li>
+          <li><a href="#pricing">Тарифы</a></li>
+          <li><a href="#cases">Наши работы</a></li>
+          <li><a href="#testimonials">Отзывы</a></li>
+          <li><a href="#footer">Контакты</a></li>
+        </ul>
+      </nav>
+      
+      <div class="header-contact">
+        <a href="tel:88002222673" class="phone-number">8 800 222-26-73</a>
+        
+        <!-- Выпадающее меню языков -->
+        <div class="lang-switcher">
+          <div class="lang-current">
+            <span>RU</span>
+            <img src="arrow-lang.svg" alt="language dropdown arrow" class="arr"/>
+          </div>
+          <ul class="lang-dropdown">
+            <li><a href="#" data-lang="en">English (EN)</a></li>
+            <li><a href="#" data-lang="de">Deutsch (DE)</a></li>
+            <li><a href="#" data-lang="fr">Français (FR)</a></li>
+            <li><a href="#" data-lang="es">Español (ES)</a></li>
+            <li><a href="#" data-lang="zh">中文 (ZH)</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Мобильное меню (полноэкранное) -->
+    <div class="mobile-menu-overlay">
+      <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+          <h2 class="mobile-menu-title">Поддержка сайтов на Drupal</h2>
+          <button class="mobile-menu-close" aria-label="Закрыть меню">
+            <span>&times;</span>
+          </button>
+        </div>
+        
+        <nav class="mobile-nav">
+          <ul>
+            <li><a href="#support">Поддержка сайтов</a></li>
+            <li><a href="#pricing">Тарифы</a></li>
+            <li><a href="#cases">Наши работы</a></li>
+            <li><a href="#testimonials">Отзывы</a></li>
+            <li><a href="#footer">Контакты</a></li>
+          </ul>
+          
+          <div class="mobile-lang-switcher">
+            <div class="mobile-lang-current">
+              <span>Язык: Русский (RU)</span>
+              <img src="arrow-lang.svg" alt="language dropdown arrow" class="arr"/>
+            </div>
+            <ul class="mobile-lang-dropdown">
+              <li><a href="#" data-lang="en">English (EN)</a></li>
+              <li><a href="#" data-lang="de">Deutsch (DE)</a></li>
+              <li><a href="#" data-lang="fr">Français (FR)</a></li>
+              <li><a href="#" data-lang="es">Español (ES)</a></li>
+              <li><a href="#" data-lang="zh">中文 (ZH)</a></li>
+            </ul>
+          </div>
+        </nav>
+        
+        <div class="mobile-contact">
+          <a href="tel:88002222673" class="mobile-phone-number">
+            <img src="phone-line (2).svg" alt="phone icon" />
+            <span>8 800 222-26-73</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <main class="hero-content">
+      <div class="hero-text">
+        <h1>Поддержка сайтов на Drupal</h1>
+        <p>
+          Сопровождение и поддержка сайтов на CMS Drupal любых версий и
+          запущенности
+        </p>
+        <a href="#pricing" class="btn btn-secondary hero-btn">Тарифы</a>
+      </div>
+      <div class="hero-stats">
+        <!-- Статистика остается без изменений -->
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <div class="stat-content">
+            <div class="stat-title">
+              <span class="stat-main-title">#1</span>
+              <img src="cup.png" alt="Trophy icon" class="stat-icon" />
+            </div>
+            <p>Drupal-разработчик в России по версии Рейтинга Рунета</p>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <p class="stat-content">
+            <strong>3+</strong><span>средний опыт специалистов более 3 лет</span>
+          </p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <p class="stat-content">
+            <strong>14</strong><span>лет опыта в сфере Drupal</span>
+          </p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <p class="stat-content">
+            <strong>200+</strong><span>Проектов на поддержке</span>
+          </p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <p class="stat-content">
+            <strong>35 000</strong><span>часов поддержки сайтов на Drupal</span>
+          </p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-line"></div>
+          <p class="stat-content">
+            <strong>200+</strong><span>модулей и тем в формате DrupalGive</span>
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section id="services" class="services-section">
+  <div class="container">
+    <h2 class="services-title">
+      13 лет совершенствуем компетенции в Drupal поддержке!
+    </h2>
+    <p class="services-subtitle">
+      Разрабатываем и оптимизируем модули, расширяем функциональность сайтов,
+      обновляем дизайн
+    </p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-1.svg"
+            alt="Добавление информации иконка"
+          />
+        </div>
+        <p>Добавление информации на сайт, создание новых разделов</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-2.svg"
+            alt="Разработка и оптимизация иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_726_82_2226_82_2009.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2016.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2017.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2018.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2019.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2020.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2013.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_726_82_2226_82_2014.svg" alt="" /> -->
+        </div>
+        <p>Разработка и оптимизация модулей сайта</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-3.svg"
+            alt="Интеграция иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_727_82_2226_82_2040.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2041.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2042.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2056.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2057.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2043.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2052.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2044.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2025.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2026.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2045.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2047.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2048.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_727_82_2226_82_2049.svg" alt="" /> -->
+        </div>
+        <p>Интеграция с CRM, 1C, платежными системами, любыми веб-сервисами</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-4.svg"
+            alt="Доработки функционала иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_731_82_2226_82_2078.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2089.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2090.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2098.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2099.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2100.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2097.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2092.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_731_82_2226_82_2091.svg" alt="" /> -->
+        </div>
+        <p>Любые доработки функционала и дизайна</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-5.svg"
+            alt="Аудит и мониторинг иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_728_82_2226_82_2114.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2115.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2117.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2116.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2104.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2105.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2118.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2127.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2119.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2120.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2121.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2122.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2123.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_728_82_2226_82_2124.svg" alt="" /> -->
+        </div>
+        <p>Аудит и мониторинг безопасности Drupal сайтов</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-6.svg"
+            alt="Миграция и импорт иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_729_82_2226_82_2161.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_729_82_2226_82_2162.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_729_82_2226_82_2165.svg" alt="" /> -->
+        </div>
+        <p>Миграция, импорт контента и апгрейд Drupal</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-7.svg"
+            alt="Оптимизация и ускорение иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_724_82_2226_82_2217.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2194.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2195.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2196.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2197.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2198.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2199.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2200.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2201.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2202.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2203.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2205.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_724_82_2226_82_2206.svg" alt="" /> -->
+        </div>
+        <p>Оптимизация и ускорение Drupal-сайтов</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrapper">
+          <!-- merged image -->
+          <img src="Vector.svg" alt="icon background" />
+          <img
+            src="competency-8.svg"
+            alt="Веб-маркетинг и SEO иконка"
+          />
+          <!-- <img src="${ASSET_PATH}/I2_730_82_2226_82_3448.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3447.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3432.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3433.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3434.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3437.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3438.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3436.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3449.svg" alt="" />
+          <img src="${ASSET_PATH}/I2_730_82_2226_82_3450.svg" alt="" /> -->
+        </div>
+        <p>Веб-маркетинг, консультации и работы по SEO</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="support" class="support-section">
+  <div class="support-bg-elements">
+    <!-- <img
+      src="${ASSET_PATH}/2_506.svg"
+      alt="background druplicon"
+      class="support-bg-druplicon"
+    /> -->
+    
+  </div>
+  <div class="container">
+    <h2 class="support-title">Поддержка от Drupal-coder</h2>
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>01.</span>
+          <h3>Постановка задачи по Email</h3>
+        </div>
+        <p>
+          Удобная и привычная модель постановки задач, при которой задачи
+          фиксируются и никогда не теряются.
+        </p>
+        <img
+          src="support1.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>02.</span>
+          <h3>Система Helpdesk – отчетность, прозрачность</h3>
+        </div>
+        <p>
+          Возможность посмотреть все заявки в работе и отработанные часы в
+          личном кабинете через браузер.
+        </p>
+        <img
+          src="support2.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>03.</span>
+          <h3>Расширенная техническая поддержка</h3>
+        </div>
+        <p>
+          Возможность организации расширенной техподдержки с 6:00 до 22:00 без
+          выходных.
+        </p>
+        <img
+          src="support3.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>04.</span>
+          <h3>Персональный менеджер проекта</h3>
+        </div>
+        <p>
+          Ваш менеджер проекта всегда в курсе текущего состояния проекта и в
+          любой момент готов ответить на любые вопросы.
+        </p>
+        <img
+          src="support4.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>05.</span>
+          <h3>Удобные способы оплаты</h3>
+        </div>
+        <p>
+          Безналичный расчет по договору или электронные деньги: WebMoney,
+          Яндекс.Деньги, Paypal.
+        </p>
+        <img
+          src="support5.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>06.</span>
+          <h3>Работаем с SLA и NDA</h3>
+        </div>
+        <p>
+          Работа в рамках соглашений о конфиденциальности и об уровне качетсва
+          работ.
+        </p>
+        <img
+          src="support6.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>07.</span>
+          <h3>Штатные специалисты</h3>
+        </div>
+        <p>Надежные штатные специалисты, никаких фрилансеров.</p>
+        <img
+          src="support7.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+      <div class="support-card">
+        <div class="support-card-header">
+          <span>08.</span>
+          <h3>Удобные каналы связи</h3>
+        </div>
+        <p>Консультации по телефону, скайпу, в месенджерах.</p>
+        <img
+          src="support8.svg"
+          alt="icon"
+          class="support-card-icon"
+        />
+      </div>
+    </div>
+    <div class="expertise-section">
+      <!-- Добавляем ноутбук внутрь expertise-section -->
+      <div class="expertise-laptop">
+        <img src="laptop.png" alt="laptop base" />
+      </div>
+      <div class="expertise-content">
+        <h2>Экспертиза в Drupal, опыт 14 лет!</h2>
+        <div class="expertise-points-horizontal">
+          <div class="expertise-point">
+            <div class="expertise-line"></div>
+            <p>
+              Только системный подход – контроль версий, резервирование и
+              тестирование!
+            </p>
+          </div>
+          <div class="expertise-point">
+            <div class="expertise-line"></div>
+            <p>Только Drupal сайты, не берем на поддержку сайты на других CMS!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="pricing-section">
+  <div class="pricing-bg">
+    <!-- merged image -->
+    <!-- <img src="${ASSET_PATH}/2_417.svg" alt="background shape" />
+    <img src="${ASSET_PATH}/2_434.svg" alt="background shape highlight" /> -->
+  </div>
+  <div class="container">
+    <h2 class="pricing-title">Тарифы</h2>
+    <div class="pricing-cards">
+      <div class="price-card">
+        <h3 class="price-card-title">Стартовый</h3>
+        <div class="price-tag">
+          1500 ₽ <span class="price-period">в час</span>
+        </div>
+        <hr class="price-divider" />
+        <ul>
+          <li>
+            <img src="checked.svg" alt="check" /> Предоплата
+            от 2 часов
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" />
+            Консультации и работы по SEO
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Услуги
+            дизайнера
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" />
+            Стандартное время реакции
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" />
+            Неиспользованные оплаченные часы переносятся на следующий месяц
+          </li>
+        </ul>
+        <a href="#footer" class="btn btn-secondary">Оставить заявку!</a>
+      </div>
+      <div class="price-card highlighted">
+        <h3 class="price-card-title">Бизнес</h3>
+        <div class="price-tag">
+          2000 ₽ <span class="price-period">в час</span>
+        </div>
+        <hr class="price-divider" />
+        <ul>
+          <li>
+            <img src="checked.svg" alt="check" /> Предоплата от 10
+            часов
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Консультации и
+            работы по SEO
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Услуги дизайнера
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Высокое время
+            реакции – до 2 рабочих дней
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Неиспользованные
+            часы не переносятся
+          </li>
+        </ul>
+        <a href="#footer" class="btn btn-primary">Оставить заявку!</a>
+      </div>
+      <div class="price-card">
+        <h3 class="price-card-title">VIP</h3>
+        <div class="price-tag">
+          2500 ₽ <span class="price-period">в час</span>
+        </div>
+        <hr class="price-divider" />
+        <ul>
+          <li>
+            <img src="checked.svg" alt="check" /> Предоплата от 100
+            часов
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Консультации и
+            работы по SEO
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Услуги дизайнера
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Максимальное время
+            реакции – в день обращения
+          </li>
+          <li>
+            <img src="checked.svg" alt="check" /> Неиспользованные
+            часы не переносятся
+          </li>
+        </ul>
+        <a href="#footer" class="btn btn-secondary">Оставить заявку!</a>
+      </div>
+    </div>
+    <div class="pricing-footer">
+      <p>
+        Вам не подходят наши тарифы? Оставьте заявку и мы предложим вам
+        индивидуальные условия!
+      </p>
+      <a href="#footer">Получить индивидуальный тариф</a>
+    </div>
+  </div>
+</section>
+<section id="developer-form" class="developer-form-section">
+<div class="container">
+<div class="anketa-container">
         <div class="logout-link">
             <?php if ($is_authenticated): ?><a href="?logout=1">Выйти</a><?php endif; ?>
         </div>
@@ -504,8 +948,659 @@ unset($_SESSION['auth_error']);
             <button type="submit" class="btn-submit"><?= $is_authenticated ? 'Обновить данные' : 'Сохранить' ?></button>
         </form>
     </div>
+</div>
+</section>
 
-    <script>
+
+<section id="cases" class="cases-section">
+  <div class="container">
+    <h2 class="cases-title">Последние кейсы</h2>
+    <div class="cases-grid">
+      <a href="#" class="case-card case-card-1">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 6.2.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          />
+          <img
+            src="${ASSET_PATH}/e8944c2dee65fbb404111995265ed608c0f68104.png"
+            alt="Case background"
+          />
+          <img
+            src="${ASSET_PATH}/12a3191032ce9867937009f986c4177c5f9f88da.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content">
+          <h3>Настройка выгрузки YML для Яндекс.Маркета</h3>
+          <p class="case-date">22.04.2019</p>
+          <p class="case-desc">
+            Эти слова совершенно справедливы, однако гипнотический рифф
+            продолжает паузный пласт.
+          </p>
+        </div>
+      </a>
+      <a href="#" class="case-card case-card-2">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 6.3.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          />
+          <img
+            src="${ASSET_PATH}/e8944c2dee65fbb404111995265ed608c0f68104.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content overlay">
+          <h3>Настройка выгрузки YML для Яндекс.Маркета</h3>
+          <p class="case-date">22.04.2019</p>
+        </div>
+      </a>
+      <a href="#" class="case-card case-card-3">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 7.3.png"
+            alt="Case background"
+          />
+        </div>
+        <div class="case-card-content">
+          <h3>Настройка выгрузки YML для Яндекс.Маркета</h3>
+          <p class="case-date">22.04.2019</p>
+          <p class="case-desc">
+            Эти слова совершенно справедливы, однако гипнотический рифф
+            продолжает паузный пласт.
+          </p>
+        </div>
+      </a>
+      <a href="#" class="case-card case-card-4">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 8.3.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          />
+          <img
+            src="${ASSET_PATH}/e8944c2dee65fbb404111995265ed608c0f68104.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content overlay">
+          <h3>Настройка выгрузки YML для Яндекс.Маркета</h3>
+          <p class="case-date">22.04.2019</p>
+        </div>
+      </a>
+      <a href="#" class="case-card case-card-5">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 9.2.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content overlay">
+          <h3>Настройка выгрузки YML для Яндекс.Маркета</h3>
+          <p class="case-date">22.04.2019</p>
+        </div>
+      </a>
+      
+      <!-- Новая карточка 6 (занимает 2/3 третьего ряда на десктопе) -->
+      <a href="#" class="case-card case-card-6">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 10.1.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          />
+          <img
+            src="${ASSET_PATH}/e8944c2dee65fbb404111995265ed608c0f68104.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content overlay">
+          <h3>Оптимизация контекстной рекламы</h3>
+          <p class="case-date">15.03.2019</p>
+          <p class="case-desc">
+            Повысили конверсию на 30% для клиента из сферы e-commerce
+            за счет грамотной настройки рекламных кампаний.
+          </p>
+        </div>
+      </a>
+      
+      <!-- Новая карточка 7 (занимает 1/3 третьего ряда на десктопе) -->
+      <a href="#" class="case-card case-card-7">
+        <div class="case-card-bg">
+          <!-- merged image -->
+          <img
+            src="image 11.1.png"
+            alt="Case background"
+          />
+          <!-- <img
+            src="${ASSET_PATH}/4dafacc165b526b404520c4eea02f6792454684e.png"
+            alt="Case background"
+          /> -->
+        </div>
+        <div class="case-card-content">
+          <h3>Аудит сайта и техническая оптимизация</h3>
+          <p class="case-date">10.02.2019</p>
+          <p class="case-desc">
+            Провели комплексный аудит и устранили 95% технических
+            ошибок, что улучшило позиции сайта в поисковой выдаче.
+          </p>
+        </div>
+      </a>
+    </div>
+    <div class="cases-footer">
+      <button class="btn btn-secondary">Показать ещё</button>
+    </div>
+  </div>
+</section>
+
+<section id="team" class="team-section">
+  <div class="container">
+    <h2 class="team-title">Команда</h2>
+    <div class="team-grid">
+      <div class="team-member">
+        <img
+          src="v2_382.png"
+          alt="Лёша"
+        />
+        <h3>Лёша</h3>
+        <p>руководитель поддержки, планирование задач</p>
+      </div>
+      <div class="team-member">
+        <img
+          src="v2_400.png"
+          alt="Роман"
+        />
+        <h3>Роман</h3>
+        <p>инфраструктура веб-проектов</p>
+      </div>
+      <div class="team-member">
+        <img
+          src="v2_395.png"
+          alt="Ирина"
+        />
+        <h3>Ирина</h3>
+        <p>менеджер по работе с клинетами, организация оказания услуг</p>
+      </div>
+      <div class="team-member">
+        <img
+          src="v2_395.png"
+          alt="Даша"
+        />
+        <h3>Даша</h3>
+        <p>SEO, веб-маркетинг</p>
+      </div>
+      <div class="team-member">
+        <img
+          src="v2_387.png"
+          alt="Сергей"
+        />
+        <h3>Сергей</h3>
+        <p>технический директор, 14 лет опыт работы с Drupal</p>
+      </div>
+      <div class="team-member">
+        <img
+          src="v2_405.png"
+          alt="Вадим"
+        />
+        <h3>Вадим</h3>
+        <p>UX/UI дизайн</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="testimonials-section">
+  <div class="testimonial-bg-quote">
+    <img src="${ASSET_PATH}/2_361.svg" alt="quote icon" />
+  </div>
+  <div class="container">
+    <h2 class="testimonials-title">Отзывы</h2>
+    <div class="testimonial-slider">
+      <div class="testimonial-card-bg-1"></div>
+      <div class="testimonial-card-bg-2"></div>
+      
+      <!-- Контейнер для слайдов -->
+      <div class="testimonial-slides">
+        <!-- Слайд 1 -->
+        <div class="testimonial-slide active" data-index="0">
+          <div class="testimonial-content">
+            <img src="v2_373.png" alt="Winamp Logo" class="testimonial-logo" />
+            <h3>Команда Drupal Coder вызвала только положительные впечатления!</h3>
+            <p>Нуреев Александр, менеджер проекта Winamp Russian Community</p>
+          </div>
+        </div>
+        
+        <!-- Слайд 2 -->
+        <div class="testimonial-slide" data-index="1">
+          <div class="testimonial-content">
+            <img src="v2_373.png" alt="Logo 2" class="testimonial-logo" />
+            <h3>Отличная работа! Быстро и качественно.</h3>
+            <p>Иванов Иван, директор компании "Пример"</p>
+          </div>
+        </div>
+        
+        <!-- Слайд 3 -->
+        <div class="testimonial-slide" data-index="2">
+          <div class="testimonial-content">
+            <img src="v2_373.png" alt="Logo 3" class="testimonial-logo" />
+            <h3>Профессионалы своего дела! Рекомендую!</h3>
+            <p>Петрова Мария, CEO компании "ТехноЛогик"</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Карточка с контентом и навигацией (единая для всех слайдов) -->
+      <div class="testimonial-card">
+        <div class="testimonial-card-content">
+          <!-- Здесь будет динамически меняться контент из активного слайда -->
+        </div>
+        <div class="testimonial-divider"></div>
+        <div class="testimonial-nav">
+          <button class="nav-arrow prev">
+            <img src="arrow-left.svg" alt="Предыдущий отзыв" />
+          </button>
+          <span class="slide-counter">01 / 03</span>
+          <button class="nav-arrow next">
+            <img src="arrow-right.svg" alt="Следующий отзыв" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="partners" class="partners-section">
+  <div class="container">
+    <h2 class="partners-title">С нами работают</h2>
+    <p class="partners-subtitle">
+      Десятки компаний доверяют нам самое ценное, что у них есть в интернете –
+      свои сайты. Мы делаем всё, чтобы наше сотрудничество было долгим.
+    </p>
+  </div>
+  
+  <!-- Первая бегущая строка -->
+  <div class="partners-row-wrapper">
+    <div class="partners-row">
+      <div class="partner-card">
+        <img src="v2_326.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_329.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_332.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_335.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_338.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_342.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_345.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_348.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_326.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_329.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_332.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_335.png" alt="Partner logo" />
+      </div>
+    </div>
+  </div>
+  
+  <!-- Вторая бегущая строка (движется в обратном направлении) -->
+  <div class="partners-row-wrapper reverse">
+    <div class="partners-row">
+      <div class="partner-card">
+        <img src="v2_338.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_342.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_345.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_348.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_326.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_329.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_332.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_335.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_338.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_342.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_345.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_348.png" alt="Partner logo" />
+      </div>
+    </div>
+  </div>
+  
+  <!-- Третья бегущая строка -->
+  <div class="partners-row-wrapper">
+    <div class="partners-row">
+      <div class="partner-card">
+        <img src="v2_345.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_348.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_326.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_329.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_332.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_335.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_338.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_342.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_345.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_348.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_326.png" alt="Partner logo" />
+      </div>
+      <div class="partner-card">
+        <img src="v2_329.png" alt="Partner logo" />
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="partners-footer">
+      <button class="btn btn-primary">Все кейсы</button>
+    </div>
+  </div>
+</section>
+
+<footer id="footer" class="footer-section">
+  <div class="footer-bg"></div>
+  <div class="footer-deco-1">
+    <!-- merged image -->
+    <!-- <img src="${ASSET_PATH}/2_214.svg" alt="decoration" />
+    <img src="${ASSET_PATH}/2_231.svg" alt="decoration" /> -->
+  </div>
+  <div class="footer-deco-2">
+    <!-- merged image -->
+    <!-- <img src="${ASSET_PATH}/2_250.svg" alt="decoration" />
+    <img src="${ASSET_PATH}/2_267.svg" alt="decoration" /> -->
+  </div>
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-contact-info">
+        <h2>Оставить заявку на поддержку сайта</h2>
+        <p>
+          Срочно нужна поддержка сайта? Ваша команда не успевает справиться
+          самостоятельно или предыдущий подрядчик не справился с работой? Тогда
+          вам точно к нам! Просто оставьте заявку и наш менеджер с вами
+          свяжется!
+        </p>
+        <div class="contact-details">
+          <a href="tel:88002222673" class="contact-item">
+            <img src="phone-line (2).svg" alt="phone icon" />
+            <span>8 800 222-26-73</span>
+          </a>
+          <a href="mailto:info@drupal-coder.ru" class="contact-item">
+            <img src="mail.svg" alt="mail icon" />
+            <span>info@drupal-coder.ru</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Форма с атрибутами для Formcarry -->
+     <!-- Обновленный HTML формы -->
+<form 
+  id="supportForm" 
+  class="footer-form" 
+  action="https://formcarry.com/s/2LYjmA9wtHj" 
+  method="POST"
+  accept-charset="UTF-8"
+>
+  <!-- Скрытое поле для защиты от спама -->
+  <input type="hidden" name="_gotcha" style="display:none">
+  
+  <!-- Поле для редиректа после успешной отправки (опционально) -->
+  <input type="hidden" name="_redirect" value="#thank-you-message">
+  
+  <div class="form-group">
+    <input type="text" id="name" name="name" required />
+    <label for="name">Ваше имя</label>
+  </div>
+  <div class="form-group">
+    <input type="tel" id="phone" name="phone" required />
+    <label for="phone">Телефон</label>
+  </div>
+  <div class="form-group">
+    <input type="email" id="email" name="email" required />
+    <label for="email">E-mail</label>
+  </div>
+  <div class="form-group">
+    <textarea id="comment" name="comment" rows="4"></textarea>
+    <label for="comment">Ваш комментарий</label>
+  </div>
+  <div class="form-checkbox">
+    <input type="checkbox" id="agreement" name="agreement" required />
+    <label for="agreement">
+      <span class="custom-checkbox"></span>
+      Отправляя заявку, я даю согласие на обработку своих персональных данных
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary" id="submitBtn">
+    <span class="btn-text">Оставить заявку!</span>
+    <span class="btn-loader" style="display: none;">Отправка...</span>
+  </button>
+  
+  <!-- Сообщения об успехе/ошибке -->
+  <div id="form-messages" class="form-messages" style="display: none;"></div>
+</form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <hr class="footer-divider" />
+      <div class="footer-copyright">
+        <p>Проект ООО «Инитлаб», Краснодар, Россия.</p>
+        <p>
+          Drupal является зарегистрированной торговой маркой Dries Buytaert.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="form_scr1.js"></script>
+<script src="testimonial_js.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Элементы для мобильного меню
+  const hamburger = document.querySelector('.hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu-overlay');
+  const mobileMenuClose = document.querySelector('.mobile-menu-close');
+  const mobileLangSwitcher = document.querySelector('.mobile-lang-switcher');
+  const mobileLangCurrent = document.querySelector('.mobile-lang-current');
+  
+  // Функция для закрытия мобильного меню
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('active');
+    hamburger.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  
+  // Открытие/закрытие мобильного меню
+  hamburger.addEventListener('click', function() {
+    mobileMenu.classList.add('active');
+    hamburger.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+  
+  mobileMenuClose.addEventListener('click', closeMobileMenu);
+  
+  // Закрытие меню при клике вне его
+  mobileMenu.addEventListener('click', function(e) {
+    if (e.target === mobileMenu) {
+      closeMobileMenu();
+    }
+  });
+  
+  // Закрытие меню при нажатии Esc
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+    }
+  });
+  
+  // Выпадающее меню языков на мобильных
+  mobileLangCurrent.addEventListener('click', function() {
+    mobileLangSwitcher.classList.toggle('active');
+  });
+  
+  // ЗАКРЫТИЕ МЕНЮ ПРИ КЛИКЕ НА НАВИГАЦИОННЫЕ ССЫЛКИ
+  // Находим все ссылки в мобильном меню
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+  
+  // Добавляем обработчик для каждой ссылки
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // Закрываем меню
+      closeMobileMenu();
+      
+      // Дополнительно: закрываем языковое меню, если оно открыто
+      mobileLangSwitcher.classList.remove('active');
+      
+      // Обработка якорных ссылок (прокрутка происходит автоматически)
+      // Можно добавить небольшую задержку для плавного закрытия меню перед скроллом
+      const href = this.getAttribute('href');
+      
+      // Если ссылка ведет на якорь на этой же странице
+      if (href.startsWith('#')) {
+        // Добавляем небольшую задержку для плавного закрытия меню
+        setTimeout(() => {
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
+          
+          if (targetElement) {
+            // Плавная прокрутка к элементу
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }, 300); // Задержка для закрытия меню перед скроллом
+      }
+    });
+  });
+  
+  // Также добавляем обработчик для ссылки телефона (если нужно)
+  const mobilePhoneLink = document.querySelector('.mobile-phone-number');
+  if (mobilePhoneLink) {
+    mobilePhoneLink.addEventListener('click', closeMobileMenu);
+  }
+  
+  // Выбор языка (для всех меню)
+  const langLinks = document.querySelectorAll('.lang-dropdown a, .mobile-lang-dropdown a');
+  
+  langLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const lang = this.getAttribute('data-lang');
+      
+      // Обновляем текущий язык
+      document.querySelector('.lang-current span').textContent = lang.toUpperCase();
+      
+      // Для мобильной версии
+      const langNames = {
+        'en': 'English',
+        'de': 'Deutsch',
+        'fr': 'Français',
+        'es': 'Español',
+        'zh': '中文',
+        'ru': 'Русский'
+      };
+      
+      document.querySelector('.mobile-lang-current span').textContent = 
+        `Язык: ${langNames[lang] || 'Русский'} (${lang.toUpperCase()})`;
+      
+      // Закрываем выпадающие меню
+      mobileLangSwitcher.classList.remove('active');
+      closeMobileMenu(); // Используем общую функцию
+      
+      // Здесь можно добавить логику смены языка на сайте
+      console.log('Выбран язык:', lang);
+    });
+  });
+  
+  // Закрытие языкового меню при клике вне его на десктопе
+  document.addEventListener('click', function(e) {
+    const langSwitcher = document.querySelector('.lang-switcher');
+    if (!langSwitcher.contains(e.target)) {
+      // Меню закрывается автоматически при уходе курсора благодаря CSS :hover
+    }
+  });
+});
+</script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('anketa-form');
             if (!form) return;
@@ -575,5 +1670,4 @@ unset($_SESSION['auth_error']);
         });
     </script>
 </body>
-
 </html>
